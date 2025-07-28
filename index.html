@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>松丹日照｜收費與補助試算</title>
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #FFF9F2;
+      color: #333;
+      padding: 2em;
+      line-height: 1.8;
+    }
+    h1 {
+      color: #009B5B;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 2em;
+      margin-top: 2em;
+      max-width: 500px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1em;
+    }
+    select {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .result {
+      margin-top: 2em;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #d13c3c;
+    }
+  </style>
+</head>
+<body>
+  <h1>松丹日照｜收費與補助試算</h1>
+  <div class="card">
+    <form id="simpleCalc">
+      <label for="level">長照等級</label>
+      <select id="level">
+        <option value="">請選擇</option>
+        <option value="2">第2級</option>
+        <option value="3">第3級</option>
+        <option value="4">第4級</option>
+        <option value="5">第5級</option>
+        <option value="6">第6級</option>
+        <option value="7">第7級</option>
+        <option value="8">第8級</option>
+      </select>
+
+      <label for="identity">身份別</label>
+      <select id="identity">
+        <option value="">請選擇</option>
+        <option value="0.16">一般戶（16%）</option>
+        <option value="0.05">中低收入戶（5%）</option>
+        <option value="0">低收入戶（0%）</option>
+      </select>
+    </form>
+
+    <div class="result" id="output" style="display:none;"></div>
+  </div>
+
+  <script>
+    const levelMap = {
+      2: 10020,
+      3: 15460,
+      4: 18580,
+      5: 24100,
+      6: 28070,
+      7: 32090,
+      8: 36180
+    };
+
+    const levelSelect = document.getElementById('level');
+    const identitySelect = document.getElementById('identity');
+    const outputDiv = document.getElementById('output');
+
+    function updateResult() {
+      const level = parseInt(levelSelect.value);
+      const identity = parseFloat(identitySelect.value);
+
+      if (!level || isNaN(identity)) {
+        outputDiv.style.display = 'none';
+        outputDiv.innerHTML = '';
+        return;
+      }
+
+      const subsidy = levelMap[level];
+
+      outputDiv.innerHTML = `
+        每月補助額度：約 <strong>${subsidy.toLocaleString()} 元</strong>
+      `;
+      outputDiv.style.display = 'block';
+    }
+
+    levelSelect.addEventListener('change', updateResult);
+    identitySelect.addEventListener('change', updateResult);
+  </script>
+</body>
+</html>
