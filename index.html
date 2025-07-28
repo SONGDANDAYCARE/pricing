@@ -2,21 +2,112 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>松丹日照｜長照2.0補助試算</title>
   <style>
-    body { font-family: 'Noto Sans TC', sans-serif; background-color: #FFF9F2; padding: 2em; line-height: 1.8; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #FFF9F2;
+      padding: 2em;
+      line-height: 1.8;
+    }
+
     h1 { margin-bottom: 0.5em; }
-    .tool-notice { margin-bottom: 1.5em; color: #555; font-size: 0.95em; }
-    label { font-weight: bold; display: block; margin-top: 1em; }
-    select { width: 100%; padding: 0.5em; margin-top: 0.3em; border: 1px solid #ccc; border-radius: 6px; }
-    .card { background-color: #FFFFFF; border-radius: 12px; padding: 2em; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 1.5em; }
-    .output { margin-top: 1.5em; font-size: 1.1em; }
-    .highlight { background-color: #FFE38E; padding: 0.4em 0.6em; border-radius: 6px; display: inline-block; margin-top: 0.5em; font-weight: bold; }
-    .info-toggle-btn { background-color: #00A34F; color: #FFFFFF; border: none; border-radius: 8px; padding: 0.6em 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.2); margin-bottom: 1em; }
-    table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 1em; }
-    colgroup col { width: 16.66%; }
-    th, td { border: 1px solid #00A34F; padding: 0.8em; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    thead th { background-color: #EAF8EF; color: #006C2E; }
+
+    .tool-notice {
+      margin-bottom: 1.5em;
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1em;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 0.3em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      padding: 2em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 1.5em;
+    }
+
+    .output {
+      margin-top: 1.5em;
+      font-size: 1.1em;
+    }
+
+    .highlight {
+      background-color: #FFE38E;
+      padding: 0.4em 0.6em;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 0.5em;
+      font-weight: bold;
+    }
+
+    .info-toggle-btn {
+      background-color: #00A34F;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6em 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      margin-bottom: 1em;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 1em;
+    }
+
+    table {
+      width: 100%;
+      table-layout: auto;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #00A34F;
+      padding: 0.8em;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    thead th {
+      background-color: #EAF8EF;
+      color: #006C2E;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1em;
+        font-size: 0.95em;
+      }
+
+      .card {
+        padding: 1em;
+      }
+
+      th, td {
+        font-size: 0.9em;
+        padding: 0.5em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -74,74 +165,66 @@
     <p><strong>※ 本試算系統僅適用於社區式長照機構「日間照顧中心」，不含晚餐與喘息服務費用試算。</strong></p>
     <p>長照身份別說明：</p>
     <ul>
-      <li><strong>長照低收入戶（0%）：</strong>列冊低收、中低收，或符閤中低收入老人生活津貼第5條第1款者</li>
+      <li><strong>長照低收入戶（0%）：</strong>列冊低收、中低收，或符合中低收入老人生活津貼第5條第1款者</li>
       <li><strong>長照中低收入戶（5%）：</strong>符合中低收入老人生活津貼第5條第2款，或領有身障生活補助</li>
       <li><strong>一般戶（16%）：</strong>除上述兩者以外身分</li>
     </ul>
 
     <h2>長照與喘息項目補助</h2>
-    <table>
-      <colgroup><col><col><col><col><col><col></colgroup>
-      <thead>
-        <tr>
-          <th rowspan="2">長照等級</th>
-          <th rowspan="2">每月補助額度</th>
-          <th colspan="3">部分負擔比率</th>
-          <th rowspan="2">喘息每年額度補助</th>
-        </tr>
-        <tr>
-          <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>第2級</td><td>10,020</td>
-          <td rowspan="7">16%</td><td rowspan="7">5%</td><td rowspan="7">0%</td>
-          <td rowspan="5">32,340</td>
-        </tr>
-        <tr><td>第3級</td><td>15,460</td></tr>
-        <tr><td>第4級</td><td>18,580</td></tr>
-        <tr><td>第5級</td><td>24,100</td></tr>
-        <tr><td>第6級</td><td>28,070</td></tr>
-        <tr>
-          <td>第7級</td><td>32,090</td>
-          <td rowspan="2">48,510</td>
-        </tr>
-        <tr><td>第8級</td><td>36,180</td></tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">長照等級</th>
+            <th rowspan="2">每月補助額度</th>
+            <th colspan="3">部分負擔比率</th>
+            <th rowspan="2">喘息每年額度補助</th>
+          </tr>
+          <tr>
+            <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>第2級</td><td>10,020</td><td rowspan="7">16%</td><td rowspan="7">5%</td><td rowspan="7">0%</td><td rowspan="5">32,340</td></tr>
+          <tr><td>第3級</td><td>15,460</td></tr>
+          <tr><td>第4級</td><td>18,580</td></tr>
+          <tr><td>第5級</td><td>24,100</td></tr>
+          <tr><td>第6級</td><td>28,070</td></tr>
+          <tr><td>第7級</td><td>32,090</td><td rowspan="2">48,510</td></tr>
+          <tr><td>第8級</td><td>36,180</td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <h2>服務項目收費說明</h2>
-    <table>
-      <colgroup><col><col><col><col><col><col></colgroup>
-      <thead>
-        <tr>
-          <th rowspan="2">服務內容</th>
-          <th rowspan="2">失能等級</th>
-          <th colspan="3">家屬負擔費用</th>
-          <th rowspan="2">超出補助後費用</th>
-        </tr>
-        <tr>
-          <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td rowspan="7">日間照顧</td>
-          <td>第2級</td><td>108元/日</td><td>33元/日</td><td>0元/日</td><td>675元/日</td>
-        </tr>
-        <tr><td>第3級</td><td>134元/日</td><td>42元/日</td><td>0元/日</td><td>840元/日</td></tr>
-        <tr><td>第4級</td><td>147元/日</td><td>46元/日</td><td>0元/日</td><td>920元/日</td></tr>
-        <tr><td>第5級</td><td>167元/日</td><td>52元/日</td><td>0元/日</td><td>1,045元/日</td></tr>
-        <tr><td>第6級</td><td>180元/日</td><td>56元/日</td><td>0元/日</td><td>1,130元/日</td></tr>
-        <tr><td>第7級</td><td>193元/日</td><td>60元/日</td><td>0元/日</td><td>1,210元/日</td></tr>
-        <tr><td>第8級</td><td>205元/日</td><td>64元/日</td><td>0元/日</td><td>1,285元/日</td></tr>
-        <tr><td>交通接送</td><td>不分級</td><td>16元/次</td><td>5元/次</td><td>0元/次</td><td>100元/次</td></tr>
-        <tr><td>沐浴服務</td><td>不分級</td><td>32元/次</td><td>10元/次</td><td>0元/次</td><td>200元/次</td></tr>
-        <tr><td>社區式晚餐</td><td>不分級</td><td>24元/次</td><td>7元/次</td><td>0元/次</td><td>150元/次</td></tr>
-        <tr><td>喘息服務</td><td>不分級</td><td>200元/次</td><td>62元/次</td><td>0元/次</td><td>1,250元/次</td></tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">服務內容</th>
+            <th rowspan="2">失能等級</th>
+            <th colspan="3">家屬負擔費用</th>
+            <th rowspan="2">超出補助後費用</th>
+          </tr>
+          <tr>
+            <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="7">日間照顧</td><td>第2級</td><td>108元/日</td><td>33元/日</td><td>0元/日</td><td>675元/日</td></tr>
+          <tr><td>第3級</td><td>134元/日</td><td>42元/日</td><td>0元/日</td><td>840元/日</td></tr>
+          <tr><td>第4級</td><td>147元/日</td><td>46元/日</td><td>0元/日</td><td>920元/日</td></tr>
+          <tr><td>第5級</td><td>167元/日</td><td>52元/日</td><td>0元/日</td><td>1,045元/日</td></tr>
+          <tr><td>第6級</td><td>180元/日</td><td>56元/日</td><td>0元/日</td><td>1,130元/日</td></tr>
+          <tr><td>第7級</td><td>193元/日</td><td>60元/日</td><td>0元/日</td><td>1,210元/日</td></tr>
+          <tr><td>第8級</td><td>205元/日</td><td>64元/日</td><td>0元/日</td><td>1,285元/日</td></tr>
+          <tr><td>交通接送</td><td>不分級</td><td>16元/次</td><td>5元/次</td><td>0元/次</td><td>100元/次</td></tr>
+          <tr><td>沐浴服務</td><td>不分級</td><td>32元/次</td><td>10元/次</td><td>0元/次</td><td>200元/次</td></tr>
+          <tr><td>社區式晚餐</td><td>不分級</td><td>24元/次</td><td>7元/次</td><td>0元/次</td><td>150元/次</td></tr>
+          <tr><td>喘息服務</td><td>不分級</td><td>200元/次</td><td>62元/次</td><td>0元/次</td><td>1,250元/次</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -213,8 +296,7 @@
       copayEl.innerText = familyCost.toLocaleString();
     }
 
-    [levelEl,identityEl,typeEl,daysEl,bathEl,transportEl]
-      .forEach(el=>el.addEventListener('change',update));
+    [levelEl,identityEl,typeEl,daysEl,bathEl,transportEl].forEach(el=>el.addEventListener('change',update));
 
     function toggleInfo(){
       const info=document.getElementById('infoSection');
