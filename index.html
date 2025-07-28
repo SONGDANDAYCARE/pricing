@@ -1,112 +1,225 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>松丹日照｜長照2.0補助試算</title>
   <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      background-color: #FFF9F2;
-      color: #333;
-      padding: 2em;
-      line-height: 1.8;
-    }
-    h1 {
-      color: #009B5B;
-    }
-    .card {
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      padding: 2em;
-      margin-top: 2em;
-      max-width: 500px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 1em;
-    }
-    select {
-      width: 100%;
-      padding: 0.6em;
-      margin-top: 0.5em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .result {
-      margin-top: 2em;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #d13c3c;
-    }
+    body { font-family: 'Noto Sans TC', sans-serif; background-color: #FFF9F2; padding: 2em; line-height: 1.8; }
+    h1 { margin-bottom: 0.5em; }
+    .tool-notice { margin-bottom: 1.5em; color: #555; font-size: 0.95em; }
+    label { font-weight: bold; display: block; margin-top: 1em; }
+    select { width: 100%; padding: 0.5em; margin-top: 0.3em; border: 1px solid #ccc; border-radius: 6px; }
+    .card { background-color: #FFFFFF; border-radius: 12px; padding: 2em; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 1.5em; }
+    .output { margin-top: 1.5em; font-size: 1.1em; }
+    .highlight { background-color: #FFE38E; padding: 0.4em 0.6em; border-radius: 6px; display: inline-block; margin-top: 0.5em; font-weight: bold; }
+    .info-toggle-btn { background-color: #00A34F; color: #FFFFFF; border: none; border-radius: 8px; padding: 0.6em 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.2); margin-bottom: 1em; }
+    table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 1em; }
+    colgroup col { width: 16.66%; }
+    th, td { border: 1px solid #00A34F; padding: 0.8em; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    thead th { background-color: #EAF8EF; color: #006C2E; }
   </style>
 </head>
 <body>
   <h1>松丹日照｜長照2.0補助試算</h1>
+  <p class="tool-notice">本試算工具僅供參考，實際補助金額以政府核定結果為準。</p>
+
   <div class="card">
-    <form id="simpleCalc">
-      <label for="level">長照等級</label>
-      <select id="level">
-        <option value="">請選擇</option>
-        <option value="2">第2級</option>
-        <option value="3">第3級</option>
-        <option value="4">第4級</option>
-        <option value="5">第5級</option>
-        <option value="6">第6級</option>
-        <option value="7">第7級</option>
-        <option value="8">第8級</option>
-      </select>
+    <label for="level">長照等級</label>
+    <select id="level">
+      <option value="">請選擇</option>
+      <option value="2">第2級</option>
+      <option value="3">第3級</option>
+      <option value="4">第4級</option>
+      <option value="5">第5級</option>
+      <option value="6">第6級</option>
+      <option value="7">第7級</option>
+      <option value="8">第8級</option>
+    </select>
 
-      <label for="identity">身份別</label>
-      <select id="identity">
-        <option value="">請選擇</option>
-        <option value="0.16">一般戶（16%）</option>
-        <option value="0.05">中低收入戶（5%）</option>
-        <option value="0">低收入戶（0%）</option>
-      </select>
-    </form>
+    <label for="identity">身分別</label>
+    <select id="identity">
+      <option value="">請選擇</option>
+      <option value="general">一般戶（16%）</option>
+      <option value="middle">中低收入戶（5%）</option>
+      <option value="low">低收入戶（0%）</option>
+    </select>
 
-    <div class="result" id="output" style="display:none;"></div>
+    <label for="type">日照服務</label>
+    <select id="type">
+      <option value="">請選擇</option>
+      <option value="full">全日</option>
+      <option value="half">半日</option>
+    </select>
+
+    <label for="days">選擇天數</label>
+    <select id="days"></select>
+
+    <label for="bath">沐浴次數</label>
+    <select id="bath"></select>
+
+    <label for="transport">交通次數</label>
+    <select id="transport"></select>
+
+    <div class="output">
+      <div>補助額度：<span id="quota">-</span> 元</div>
+      <div>已使用額度：<span id="used">-</span> 元</div>
+      <div>剩餘額度：<span id="remain">-</span> 元</div>
+      <div>家屬自付金額：<span class="highlight" id="copay">-</span> 元</div>
+    </div>
+  </div>
+
+  <button class="info-toggle-btn" onclick="toggleInfo()">說明</button>
+
+  <div class="card" id="infoSection" style="display:none;">
+    <p><strong>※ 本試算系統僅適用於社區式長照機構「日間照顧中心」，不含晚餐與喘息服務費用試算。</strong></p>
+    <p>長照身份別說明：</p>
+    <ul>
+      <li><strong>長照低收入戶（0%）：</strong>列冊低收、中低收，或符閤中低收入老人生活津貼第5條第1款者</li>
+      <li><strong>長照中低收入戶（5%）：</strong>符合中低收入老人生活津貼第5條第2款，或領有身障生活補助</li>
+      <li><strong>一般戶（16%）：</strong>除上述兩者以外身分</li>
+    </ul>
+
+    <h2>長照與喘息項目補助</h2>
+    <table>
+      <colgroup><col><col><col><col><col><col></colgroup>
+      <thead>
+        <tr>
+          <th rowspan="2">長照等級</th>
+          <th rowspan="2">每月補助額度</th>
+          <th colspan="3">部分負擔比率</th>
+          <th rowspan="2">喘息每年額度補助</th>
+        </tr>
+        <tr>
+          <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>第2級</td><td>10,020</td>
+          <td rowspan="7">16%</td><td rowspan="7">5%</td><td rowspan="7">0%</td>
+          <td rowspan="5">32,340</td>
+        </tr>
+        <tr><td>第3級</td><td>15,460</td></tr>
+        <tr><td>第4級</td><td>18,580</td></tr>
+        <tr><td>第5級</td><td>24,100</td></tr>
+        <tr><td>第6級</td><td>28,070</td></tr>
+        <tr>
+          <td>第7級</td><td>32,090</td>
+          <td rowspan="2">48,510</td>
+        </tr>
+        <tr><td>第8級</td><td>36,180</td></tr>
+      </tbody>
+    </table>
+
+    <h2>服務項目收費說明</h2>
+    <table>
+      <colgroup><col><col><col><col><col><col></colgroup>
+      <thead>
+        <tr>
+          <th rowspan="2">服務內容</th>
+          <th rowspan="2">失能等級</th>
+          <th colspan="3">家屬負擔費用</th>
+          <th rowspan="2">超出補助後費用</th>
+        </tr>
+        <tr>
+          <th>一般戶</th><th>中低收入戶</th><th>低收入戶</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="7">日間照顧</td>
+          <td>第2級</td><td>108元/日</td><td>33元/日</td><td>0元/日</td><td>675元/日</td>
+        </tr>
+        <tr><td>第3級</td><td>134元/日</td><td>42元/日</td><td>0元/日</td><td>840元/日</td></tr>
+        <tr><td>第4級</td><td>147元/日</td><td>46元/日</td><td>0元/日</td><td>920元/日</td></tr>
+        <tr><td>第5級</td><td>167元/日</td><td>52元/日</td><td>0元/日</td><td>1,045元/日</td></tr>
+        <tr><td>第6級</td><td>180元/日</td><td>56元/日</td><td>0元/日</td><td>1,130元/日</td></tr>
+        <tr><td>第7級</td><td>193元/日</td><td>60元/日</td><td>0元/日</td><td>1,210元/日</td></tr>
+        <tr><td>第8級</td><td>205元/日</td><td>64元/日</td><td>0元/日</td><td>1,285元/日</td></tr>
+        <tr><td>交通接送</td><td>不分級</td><td>16元/次</td><td>5元/次</td><td>0元/次</td><td>100元/次</td></tr>
+        <tr><td>沐浴服務</td><td>不分級</td><td>32元/次</td><td>10元/次</td><td>0元/次</td><td>200元/次</td></tr>
+        <tr><td>社區式晚餐</td><td>不分級</td><td>24元/次</td><td>7元/次</td><td>0元/次</td><td>150元/次</td></tr>
+        <tr><td>喘息服務</td><td>不分級</td><td>200元/次</td><td>62元/次</td><td>0元/次</td><td>1,250元/次</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <script>
-    const levelMap = {
-      2: 10020,
-      3: 15460,
-      4: 18580,
-      5: 24100,
-      6: 28070,
-      7: 32090,
-      8: 36180
+    const levelQuota = {2:10020,3:15460,4:18580,5:24100,6:28070,7:32090,8:36180};
+    const priceTable = {
+      general:{full:{2:108,3:134,4:147,5:167,6:180,7:193,8:205},half:{2:54,3:67,4:73,5:84,6:90,7:96,8:103},bath:32,transport:16},
+      middle:{full:{2:33,3:42,4:46,5:52,6:56,7:60,8:64},half:{2:17,3:21,4:23,5:26,6:28,7:30,8:32},bath:10,transport:5},
+      low:{full:{2:0,3:0,4:0,5:0,6:0,7:0,8:0},half:{2:0,3:0,4:0,5:0,6:0,7:0,8:0},bath:0,transport:0}
+    };
+    const serviceSubsidy = {
+      full:{2:675,3:840,4:920,5:1045,6:1130,7:1210,8:1285},
+      half:{2:337,3:420,4:460,5:522,6:565,7:605,8:642},
+      bath:200,
+      transport:100
     };
 
-    const levelSelect = document.getElementById('level');
-    const identitySelect = document.getElementById('identity');
-    const outputDiv = document.getElementById('output');
+    const levelEl=document.getElementById('level');
+    const identityEl=document.getElementById('identity');
+    const typeEl=document.getElementById('type');
+    const daysEl=document.getElementById('days');
+    const bathEl=document.getElementById('bath');
+    const transportEl=document.getElementById('transport');
+    const quotaEl=document.getElementById('quota');
+    const usedEl=document.getElementById('used');
+    const remainEl=document.getElementById('remain');
+    const copayEl=document.getElementById('copay');
 
-    function updateResult() {
-      const level = parseInt(levelSelect.value);
-      const identity = parseFloat(identitySelect.value);
+    function initSelect(el,max){
+      el.innerHTML='';
+      for(let i=0;i<=max;i++){
+        const opt=document.createElement('option');
+        opt.value=i; opt.text=i;
+        el.appendChild(opt);
+      }
+    }
+    initSelect(daysEl,31);
+    initSelect(bathEl,31);
+    initSelect(transportEl,62);
 
-      if (!level || isNaN(identity)) {
-        outputDiv.style.display = 'none';
-        outputDiv.innerHTML = '';
+    function update(){
+      const level=parseInt(levelEl.value);
+      const identity=identityEl.value;
+      const type=typeEl.value;
+      const days=parseInt(daysEl.value||0);
+      const bath=parseInt(bathEl.value||0);
+      const transport=parseInt(transportEl.value||0);
+
+      if(!level||!identity||!type){
+        quotaEl.innerText=usedEl.innerText=remainEl.innerText=copayEl.innerText='-';
         return;
       }
 
-      const subsidy = levelMap[level];
+      const quota=levelQuota[level];
+      const prices=priceTable[identity];
+      const unitPay=prices[type][level];
+      const bathPay=prices.bath;
+      const transportPay=prices.transport;
+      const familyCost = unitPay*days + bathPay*bath + transportPay*transport;
 
-      outputDiv.innerHTML = `
-        每月補助額度：約 <strong>${subsidy.toLocaleString()} 元</strong>
-      `;
-      outputDiv.style.display = 'block';
+      const subTable = serviceSubsidy[type];
+      const subsidyDays = subTable[level]*days;
+      const subsidyBath = serviceSubsidy.bath * bath;
+      const subsidyTransport = serviceSubsidy.transport * transport;
+      const subsidyUsage = subsidyDays + subsidyBath + subsidyTransport;
+
+      quotaEl.innerText = quota.toLocaleString();
+      usedEl.innerText = subsidyUsage.toLocaleString();
+      remainEl.innerText = (quota - subsidyUsage).toLocaleString();
+      copayEl.innerText = familyCost.toLocaleString();
     }
 
-    levelSelect.addEventListener('change', updateResult);
-    identitySelect.addEventListener('change', updateResult);
+    [levelEl,identityEl,typeEl,daysEl,bathEl,transportEl]
+      .forEach(el=>el.addEventListener('change',update));
+
+    function toggleInfo(){
+      const info=document.getElementById('infoSection');
+      info.style.display = info.style.display==='none'?'block':'none';
+    }
   </script>
 </body>
 </html>
